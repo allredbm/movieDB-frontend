@@ -1,0 +1,98 @@
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+
+    <div class="movies" *ngIf="moviesList">
+      <table class="table">
+        <thead class="h">
+          <tr class="h">
+            <th class="h">Title</th>
+            <th class="h">Genre</th>
+            <th class="h">Description</th>
+            <th class="h">Date Released</th>
+            <th class="h">Link</th>
+            <th class="h">Seen</th>
+            <th class="h">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr class="movie" (dblclick)="editMovie(movie)" *ngFor="let movie of moviesList">
+
+            <ng-container *ngIf="!editMovies.includes(movie); else changeMovie">
+              <td>{{movie.title}}</td>
+              <td>{{movieGenres[movie.genre - 1].Name}}</td>
+              <td>{{movie.description}}</td>
+              <td>{{movie.dateMade | date}}</td>
+              <td>{{movie.link}}</td>
+              <td>{{movie.seen}}</td>
+            </ng-container>
+
+            <ng-template #changeMovie>
+              <td><input type="text" name="title" id="title" (keypress)="submitMovie($event, movie)" [(ngModel)]="movie.title" placeholder="Title" class="form-control"></td>
+              <td><select name="genre" id="genre" [(ngModel)]="movie.genre" class="form-control">
+                  <option *ngFor="let genre of movieGenres" [ngValue]="genre.Value">
+                      {{genre.Name}}
+              </select></td>
+              <td><textarea type="text" name="description" id="description" (keypress)="submitMovie($event, movie)" [(ngModel)]="movie.description" placeholder="Description" class="form-control"></textarea></td>
+              <td><input type="date" name="dateMade" id="dateMade" (keypress)="submitMovie($event, movie)" [(ngModel)]="movie.dateMade" placeholder="Date Released" class="form-control"></td>
+              <td><input type="text" name="link" id="link" (keypress)="submitMovie($event, movie)" [(ngModel)]="movie.link" placeholder="Link"class="form-control"></td>
+              <td></td>
+            </ng-template>
+            
+            <td class="o">
+              <button class="btn btn-success" (click)="seenMovie(movie)" *ngIf="movie.seen == false">
+                <i class="fa fa-check"></i>
+              </button>
+              <button class="btn btn-danger" (click)="unseenMovie(movie)" *ngIf="movie.seen == true">
+                <i class="fa fa-times"></i>
+              </button>
+              <button class="btn btn-primary" (click)="editMovie(movie)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+              <button class="btn btn-danger" (click)="deleteMovie(movie)">
+                  <i class="fa fa-trash"></i>
+                </button>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <form>
+      <div class="form-row">
+
+        <div class="col-md-5">
+          <input type="text" name="title" id="title" [(ngModel)]="newMovie.title" placeholder="Title" class="form-control">
+        </div>
+        <div class="col-md-5">
+          <select name="genre" id="genre" [(ngModel)]="newMovie.genre" class="form-control">
+              <option *ngFor="let genre of movieGenres" [ngValue]="genre.Value">
+                  {{genre.Name}}
+          </select>
+        </div>
+        <div class="col-md-5">
+          <textarea name="description" id="description" [(ngModel)]="newMovie.description" placeholder="Description" class="form-control"></textarea>
+        </div>
+        <div class="col-md-5">
+          <input type="date" name="dateMade" id="dateMade" [(ngModel)]="newMovie.dateMade" placeholder="Date Released" class="form-control">
+        </div>
+        <div class="col-md-5">
+          <input name="link" id="link" [(ngModel)]="newMovie.link" placeholder="Link" class="form-control">
+        </div>
+        <div class="col-md-5">
+          <label>Seen this movie?</label>
+          <input type="checkbox" name="seen" id="seen" [(ngModel)]="newMovie.seen" class="form-control">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary" (click)="create()">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-1">
+    
+  </div>
+</div>
